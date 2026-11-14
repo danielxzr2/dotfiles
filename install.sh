@@ -71,4 +71,13 @@ if command -v xfconf-query >/dev/null; then
   xfconf-query -c xfce4-terminal -p /font-name -n -t string -s "JetBrainsMono Nerd Font 11"
 fi
 
+# ─── Wallpaper ───────────────────────────────────────────
+# Viene con el symlink de i3/; aquí solo se aplica ya si hay sesión gráfica.
+WALLPAPER="$HOME/.config/i3/wallpaper.jpg"
+if [ -n "${DISPLAY:-}" ] && command -v feh >/dev/null && [ -f "$WALLPAPER" ]; then
+  feh --no-fehbg --bg-fill "$WALLPAPER" && info "ok      wallpaper aplicado"
+else
+  warn "wallpaper se aplicará al iniciar i3"
+fi
+
 info "Listo. Reinicia i3 (Mod+Shift+r) y abre nvim para instalar sus plugins."
