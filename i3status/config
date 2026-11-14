@@ -1,0 +1,55 @@
+general {
+        colors = true
+        color_good = "#a6e3a1"
+        color_degraded = "#f9e2af"
+        color_bad = "#f38ba8"
+        interval = 5
+}
+
+order += "wireless wlp2s0"
+order += "cpu_usage"
+order += "memory"
+order += "disk /"
+order += "volume master"
+order += "battery 0"
+order += "tztime local"
+
+wireless wlp2s0 {
+        format_up = "󰖩 %essid %quality"
+        format_down = "󰖪 off"
+}
+
+cpu_usage {
+        format = " %usage"
+}
+
+memory {
+        format = " %used"
+        threshold_degraded = "1G"
+}
+
+disk "/" {
+        format = "󰋊 %avail"
+}
+
+volume master {
+        format = "󰕾 %volume"
+        format_muted = "󰝟 muted"
+        device = "pulse"
+}
+
+battery 0 {
+        format = "%status %percentage %remaining"
+        format_down = ""
+        status_chr = "󰂄"
+        status_bat = "󰁹"
+        status_full = "󰁹"
+        low_threshold = 15
+        threshold_type = percentage
+        integer_battery_capacity = true
+        last_full_capacity = true
+}
+
+tztime local {
+        format = "󰃭 %a %d %b  %H:%M"
+}
