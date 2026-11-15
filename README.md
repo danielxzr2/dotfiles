@@ -31,6 +31,8 @@ cd ~/dotfiles
 
 Then restart i3 (`Mod+Shift+r`) and open `nvim` once so lazy.nvim installs its plugins.
 
+> **Icons show as boxes with hex codes?** The terminal was already running when the Nerd Font was installed. xfce4-terminal uses a single process for all windows, so close **every** terminal window and open a new one.
+
 ## Keybindings
 
 ### i3 (`Mod` = Super)
@@ -87,4 +89,4 @@ Fedora with i3, tmux ≥ 3.2, Neovim ≥ 0.10, plus: `rofi picom feh dunst xclip
 - **Wallpaper:** replace `i3/wallpaper.jpg` and press `Mod+Shift+r`.
 - **Terminal:** change `set $term` in `i3/config`.
 - **Neovim plugins:** add them in `nvim/lua/custom/plugins/`.
-- **Network interface in the bar:** edit `wireless wlp2s0` in `i3status/config` (check yours with `ip -br link`).
+- **Network in the bar:** `i3status/config` uses `wireless _first_` and `ethernet _first_`, so it picks up whatever interfaces the machine has. To pin a specific one, replace `_first_` with its name (check with `ip -br link`).
