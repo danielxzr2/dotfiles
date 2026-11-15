@@ -69,6 +69,7 @@ fi
 if command -v xfconf-query >/dev/null; then
   xfconf-query -c xfce4-terminal -p /font-use-system -n -t bool -s false
   xfconf-query -c xfce4-terminal -p /font-name -n -t string -s "JetBrainsMono Nerd Font 11"
+  xfconf-query -c xfce4-terminal -p /misc-menubar-default -n -t bool -s false   # sin barra de menú
 fi
 
 # ─── Wallpaper ───────────────────────────────────────────
