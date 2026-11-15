@@ -6,6 +6,7 @@
 --   <leader>db  poner/quitar breakpoint        <leader>dc / F5  iniciar o continuar
 --   <leader>do  step over   <leader>di  step into   <leader>dO  step out
 --   <leader>dt  terminar    <leader>du  abrir/cerrar la UI   <leader>dl  repetir la última sesión
+--   <leader>dT  (Go) depurar el test bajo el cursor
 --
 -- Los adaptadores se instalan con Mason. Go solo se configura si `go` está instalado.
 
@@ -94,6 +95,19 @@ return {
     { '<leader>dt', function() require('dap').terminate() end, desc = '[T]erminate' },
     { '<leader>du', function() require('dapui').toggle() end, desc = 'Toggle [U]I' },
     { '<leader>de', function() require('dapui').eval() end, desc = '[E]valuate expression', mode = { 'n', 'v' } },
+
+    -- Go: depurar solo el test que está bajo el cursor
+    {
+      '<leader>dT',
+      function()
+        if not have_go then
+          vim.notify('Go no está instalado (sudo dnf install golang)', vim.log.levels.WARN)
+          return
+        end
+        require('dap-go').debug_test()
+      end,
+      desc = 'Debug Go [T]est under cursor',
+    },
   },
   config = function()
     local dap = require 'dap'

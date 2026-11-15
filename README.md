@@ -10,6 +10,7 @@ My Linux setup for software engineering on Fedora: **i3** + **tmux** + **Neovim*
 │   └── wallpaper.jpg  # Catppuccin wallpaper (set with feh)
 ├── i3status/config    # status bar
 ├── nvim/              # Neovim config (based on kickstart.nvim)
+├── DEBUGGING.md       # how to debug each language in Neovim
 └── install.sh         # bootstrap script
 ```
 
@@ -101,7 +102,9 @@ git config --global merge.conflictStyle zdiff3
 
 ### Neovim: debugger
 
-[nvim-dap](https://github.com/mfussenegger/nvim-dap) with [nvim-dap-ui](https://github.com/rcarriga/nvim-dap-ui). Adapters are installed by Mason the first time nvim starts.
+[nvim-dap](https://github.com/mfussenegger/nvim-dap) with [nvim-dap-ui](https://github.com/rcarriga/nvim-dap-ui). Adapters are installed by Mason the first time nvim starts. `<leader>` is **Space**.
+
+**Step-by-step guide for every language: [DEBUGGING.md](DEBUGGING.md).**
 
 | Keys | Action |
 | --- | --- |
@@ -112,6 +115,7 @@ git config --global merge.conflictStyle zdiff3
 | `<leader>de` | Evaluate expression under cursor (or selection) |
 | `<leader>dl` | Run last session again |
 | `<leader>dt` / `<leader>du` | Terminate / toggle UI |
+| `<leader>dT` | Go: debug the test under the cursor |
 
 The UI opens when a session starts and closes when the program ends. xfce4-terminal keeps `F1` for its help, so use `<leader>di` to step into.
 
@@ -121,7 +125,7 @@ The UI opens when a session starts and closes when the program ends. xfce4-termi
 | JavaScript / TypeScript | js-debug-adapter | Runs the current file with Node (≥ 22.18 runs `.ts` directly), or attaches to `node --inspect`. |
 | C / C++ / Rust | codelldb | Build with debug info (`gcc -g -O0`, `cargo build`); asks for the executable path. |
 | C# | netcoredbg | Needs the .NET SDK (`sudo dnf install dotnet-sdk-8.0`). |
-| Go | delve | Only enabled when `go` is installed (`sudo dnf install golang`). |
+| Go | delve | Only enabled when `go` is installed (`sudo dnf install golang`); also enables the `gopls` language server. |
 
 ## Requirements
 

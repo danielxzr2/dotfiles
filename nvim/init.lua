@@ -734,6 +734,12 @@ require('lazy').setup({
         },
       }
 
+      -- Go: Mason instala gopls con `go install`, así que solo se añade si Go está instalado
+      -- (si no, mason-tool-installer daría error en cada arranque).
+      if vim.fn.executable 'go' == 1 then
+        servers.gopls = {}
+      end
+
       -- Ensure the servers and tools above are installed
       --
       -- To check the current status of installed tools and/or manually install
