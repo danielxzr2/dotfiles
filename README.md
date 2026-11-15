@@ -80,6 +80,25 @@ Sessions are auto-saved every 15 minutes and restored when tmux starts (tmux-con
 
 [vim-tmux-navigator](https://github.com/christoomey/vim-tmux-navigator): `C-h/j/k/l` moves between Neovim splits **and** tmux panes with no prefix. In a plain shell, `C-l` no longer clears the screen; use `prefix C-l` or `clear`.
 
+### Neovim: merge conflicts
+
+[git-conflict.nvim](https://github.com/akinsho/git-conflict.nvim) highlights conflicts in the buffer and resolves them with one key. These keys only exist in files that have conflicts:
+
+| Keys | Action |
+| --- | --- |
+| `]x` / `[x` | Next / previous conflict |
+| `co` / `ct` | Keep ours / theirs |
+| `cb` / `c0` | Keep both / neither |
+| `:GitConflictListQf` | List all conflicts in the repo (quickfix) |
+
+LSP diagnostics are hidden while a file has conflict markers and come back once it's resolved.
+
+For easier conflicts, make git also show the original code (the merge base) between both sides:
+
+```sh
+git config --global merge.conflictStyle zdiff3
+```
+
 ## Requirements
 
 Fedora with i3, tmux ≥ 3.2, Neovim ≥ 0.10, plus: `rofi picom feh dunst xclip flameshot playerctl brightnessctl ripgrep fd-find`. `install.sh --packages` installs them all.
