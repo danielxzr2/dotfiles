@@ -8,7 +8,10 @@
 return {
   'akinsho/git-conflict.nvim',
   version = '*',
-  event = { 'BufReadPre', 'BufNewFile' }, -- tiene que cargar antes de leer el archivo para detectar los conflictos
+  -- Se carga al arrancar: el plugin busca los archivos con conflictos en el evento VimEnter.
+  -- Con carga perezosa se lo perdía y `nvim` + :GitConflictListQf salía vacío.
+  -- Es pequeño y la búsqueda es un `git diff` asíncrono, no frena el arranque.
+  lazy = false,
   config = function()
     -- No usamos `disable_diagnostics = true`: llama a vim.diagnostic.disable(),
     -- que ya no existe en Neovim 0.12. Lo hacemos aquí con la API nueva.

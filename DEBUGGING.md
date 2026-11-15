@@ -1,5 +1,7 @@
 # Debugging in Neovim
 
+This guide covers the [debugger](#keys) and, at the end, [resolving merge conflicts](#resolving-merge-conflicts).
+
 The debugger is [nvim-dap](https://github.com/mfussenegger/nvim-dap) with [nvim-dap-ui](https://github.com/rcarriga/nvim-dap-ui). The debug adapters (one per language) are installed by Mason the first time nvim starts. The config is in [`nvim/lua/kickstart/plugins/debug.lua`](nvim/lua/kickstart/plugins/debug.lua).
 
 ## The leader key
@@ -115,3 +117,93 @@ Needs the .NET SDK (`sudo dnf install dotnet-sdk-8.0`). Build with `dotnet build
 - **Nothing happens on `Space d c` in a language**: check the adapter is installed with `:Mason` (debugpy, codelldb, js-debug-adapter, netcoredbg, delve).
 - **Breakpoint shows `⊘` (rejected)**: the line has no code (blank or comment), or for C/C++/Rust the program was built without `-g`.
 - **Logs**: `:lua require('dap').set_log_level('TRACE')`, reproduce, then read `~/.local/state/nvim/dap.log`.
+
+## Resolving merge conflicts
+
+Conflicts are handled by [git-conflict.nvim](https://github.com/akinsho/git-conflict.nvim) (config in [`nvim/lua/custom/plugins/git-conflict.lua`](nvim/lua/custom/plugins/git-conflict.lua)). It highlights each conflict in the buffer and resolves it with one key.
+
+### Keys
+
+These keys only exist in buffers that have conflicts, so they don't change normal editing anywhere else.
+
+| Keys | Action |
+| --- | --- |
+| `]x` / `[x` | Next / previous conflict in the file |
+| `co` | Keep **ours** (your side) |
+| `ct` | Keep **theirs** (the incoming side) |
+| `cb` | Keep **both** (ours first, then theirs) |
+| `c0` | Keep **none** (delete both sides) |
+| `:GitConflictChooseBase` | Keep the **base** (the original code before either change) |
+| `:GitConflictListQf` | Put every conflict in the repo in the quickfix list |
+| `]q` / `[q` | Next / previous entry in the quickfix list |
+
+### Reading a conflict
+
+With `merge.conflictStyle zdiff3` (see the [README](README.md#neovim-merge-conflicts)), each conflict has three parts:
+
+```
+<<<<<<< HEAD
+color = "green"          ← ours: what your branch has
+||||||| 228d416
+color = "red"            ← base: what the code was before both changes
+=======
+color = "blue"           ← theirs: what the branch you're merging has
+>>>>>>> feature
+```
+
+Compare each side with the **base** to see what each branch actually changed. Here both changed `red`, so you have to decide. If only one side differs from the base, that side is usually the right one.
+
+### Workflow
+
+1. **Merge** as usual. Git stops and lists the conflicted files:
+
+   ```sh
+   git merge feature
+   # CONFLICT (content): Merge conflict in config.go
+   ```
+
+2. **Open nvim in the repo** and list every conflict:
+
+   ```
+   nvim
+   :GitConflictListQf
+   ```
+
+   The quickfix window opens with one line per conflict, across all files. Press `Enter` on one to jump to it.
+
+3. **Resolve each conflict.** On a conflict, read the three parts, then:
+   - `co`, `ct`, `cb` or `c0` if one of the options is what you want, or
+   - **edit by hand** when the right answer mixes both sides: write the final code and delete the marker lines (`<<<<<<<`, `|||||||`, `=======`, `>>>>>>>`).
+
+   Then `]x` for the next conflict in the same file, or `]q` for the next one in the quickfix list. While a file still has markers, LSP errors are hidden (the markers aren't valid code). They come back once the file is resolved, so check them before moving on.
+
+4. **Save** each file (`:w`, or `:wa` for all).
+
+5. **Make sure nothing is left**, then mark the files as resolved and finish the merge:
+
+   ```sh
+   git diff --check          # prints any leftover conflict markers
+   git add config.go         # or: git add -u
+   git merge --continue      # opens the commit message, save and quit
+   ```
+
+   Run the build/tests before `git merge --continue` if you can: a merge without conflict markers can still be broken.
+
+**Changed your mind?** `git merge --abort` puts everything back to how it was before the merge.
+
+### Rebase: ours and theirs are swapped
+
+During `git rebase`, git replays **your** commits on top of the other branch, so the roles flip:
+
+| | `git merge` | `git rebase` |
+| --- | --- | --- |
+| **ours** (`co`, `HEAD`) | your branch | the branch you're rebasing onto |
+| **theirs** (`ct`) | the branch you're merging | your commit being replayed |
+
+So in a rebase, `ct` keeps **your** change. The marker labels (`HEAD`, the commit name after `>>>>>>>`) tell you which is which. The steps are the same, but finish with `git add` + `git rebase --continue` (repeat for each commit that conflicts), or undo with `git rebase --abort`.
+
+### Troubleshooting
+
+- **Conflict not highlighted / keys don't work**: run `:GitConflictRefresh`. Files opened before the merge started may need `:e` to reload.
+- **`:GitConflictListQf` is empty but git says there are conflicts**: make sure nvim was started inside the repo (`:pwd`).
+- **Lost track of what's left**: `git status` lists files under *Unmerged paths* until you `git add` them.
