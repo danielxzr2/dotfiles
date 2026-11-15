@@ -99,6 +99,30 @@ For easier conflicts, make git also show the original code (the merge base) betw
 git config --global merge.conflictStyle zdiff3
 ```
 
+### Neovim: debugger
+
+[nvim-dap](https://github.com/mfussenegger/nvim-dap) with [nvim-dap-ui](https://github.com/rcarriga/nvim-dap-ui). Adapters are installed by Mason the first time nvim starts.
+
+| Keys | Action |
+| --- | --- |
+| `<leader>db` / `<leader>dB` | Breakpoint / conditional breakpoint |
+| `<leader>dc` or `F5` | Start / continue |
+| `<leader>do` / `<leader>di` / `<leader>dO` | Step over / into / out |
+| `<leader>dC` | Run to cursor |
+| `<leader>de` | Evaluate expression under cursor (or selection) |
+| `<leader>dl` | Run last session again |
+| `<leader>dt` / `<leader>du` | Terminate / toggle UI |
+
+The UI opens when a session starts and closes when the program ends. xfce4-terminal keeps `F1` for its help, so use `<leader>di` to step into.
+
+| Language | Adapter | Notes |
+| --- | --- | --- |
+| Python | debugpy | Runs the current file; uses the active virtualenv. |
+| JavaScript / TypeScript | js-debug-adapter | Runs the current file with Node (≥ 22.18 runs `.ts` directly), or attaches to `node --inspect`. |
+| C / C++ / Rust | codelldb | Build with debug info (`gcc -g -O0`, `cargo build`); asks for the executable path. |
+| C# | netcoredbg | Needs the .NET SDK (`sudo dnf install dotnet-sdk-8.0`). |
+| Go | delve | Only enabled when `go` is installed (`sudo dnf install golang`). |
+
 ## Requirements
 
 Fedora with i3, tmux ≥ 3.2, Neovim ≥ 0.10, plus: `rofi picom feh dunst xclip flameshot playerctl brightnessctl ripgrep fd-find`. `install.sh --packages` installs them all.
