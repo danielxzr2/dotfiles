@@ -58,8 +58,9 @@ Then restart i3 (`Mod+Shift+r`) and open `nvim` once so lazy.nvim installs its p
 | `Mod+Shift+q` | Close window |
 | `Mod+Shift+c` / `Mod+Shift+r` | Reload / restart i3 |
 | `Print` / `Shift+Print` | Screenshot (area / full screen to clipboard) |
+| `Mod+Shift+b` | Bluetooth manager (pair / connect devices) |
 
-Volume, mic, brightness and media keys work out of the box.
+Volume, mic, brightness and media keys work out of the box. The bar's tray has icons for network (`nm-applet`) and Bluetooth (`blueman-applet`, started by `dex-autostart`): click to connect or turn it on/off.
 
 ### tmux (prefix = `C-s`)
 
@@ -129,7 +130,7 @@ The UI opens when a session starts and closes when the program ends. xfce4-termi
 
 ## Requirements
 
-Fedora with i3, tmux ≥ 3.2, Neovim ≥ 0.10, plus: `rofi picom feh dunst xclip flameshot playerctl brightnessctl ripgrep fd-find`. `install.sh --packages` installs them all.
+Fedora with i3, tmux ≥ 3.2, Neovim ≥ 0.10, plus: `rofi picom feh dunst xclip flameshot playerctl brightnessctl blueman ripgrep fd-find`. `install.sh --packages` installs them all.
 
 ## Customizing
 

@@ -32,7 +32,7 @@ if [ "${1:-}" = "--packages" ]; then
   info "Instalando paquetes con dnf"
   sudo dnf install -y git neovim tmux i3 i3status i3lock xss-lock dex-autostart \
     rofi dmenu picom feh dunst xclip flameshot playerctl brightnessctl \
-    network-manager-applet ripgrep fd-find gcc make unzip curl
+    network-manager-applet blueman ripgrep fd-find gcc make unzip curl
 fi
 
 # ─── Symlinks ────────────────────────────────────────────
